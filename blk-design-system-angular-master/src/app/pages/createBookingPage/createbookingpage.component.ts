@@ -288,7 +288,8 @@ export class CreateBookingComponent implements OnInit {
     let bookingReview: BookingReview = new BookingReview();
     let tickets: Array<Tickets> = new Array();
     console.log(this.clientSearch);
-    booking.codigoCliente = this.clientSearch.codigo;
+    booking.tipoIdentificacion = this.clientSearch.tipoIdentificacion;
+    booking.identificacion = this.clientSearch.identificacion;
     bookingReview.cliente = this.clientSearch;
     booking.codigoRuta = this.ruta.codigo;
     bookingReview.ruta = this.ruta;
@@ -300,9 +301,11 @@ export class CreateBookingComponent implements OnInit {
     this.ticketMap.forEach(tmp => {
       for (var i = 0; i < this.numberTickets; i++) {
         let ticket: Tickets = new Tickets();
-        ticket.codigoPasajero = this.passengerinfo[i].codigo;
-        ticket.codigoAsiento = tmp.asientos[i].codigo;
-        ticket.codigoVuelo = tmp.vuelo.codigo;
+        ticket.tipoIdentificacionPasajero = this.passengerinfo[i].tipoIdentificacion;
+        ticket.identificacionPasajero = this.passengerinfo[i].identificacion;
+        ticket.numeroAsiento = tmp.asientos[i].numeroAsiento;
+        ticket.codigoAeropuertoOrigen= tmp.vuelo.codigoAeropuertoOrigen;
+        ticket.codigoAeropuertoDestino= tmp.vuelo.codigoAeropuertoDestino;
         tickets.push(ticket);
       }
     }, this);

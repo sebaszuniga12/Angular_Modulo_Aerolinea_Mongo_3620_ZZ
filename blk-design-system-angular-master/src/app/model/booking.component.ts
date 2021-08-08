@@ -1,7 +1,8 @@
 import { Tickets } from "./tickets.components";
 
 export class Booking{
-    codigoCliente: number = 0;
+    tipoIdentificacion: String = "";
+    identificacion: String = "";
     codigoRuta: number = 0;
     numeroBoletos: number = 0;
     fechaSalida: String = "";
