@@ -1,0 +1,159 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-transparent" color-on-scroll="100" id="navbar-top">
+  <div class="container">
+
+    <div class="navbar-translate">
+      <a class="navbar-brand" [routerLink]="" placement="bottom">
+        <span> BLK• </span> Reserva de Vuelos
+      </a>
+      <button aria-controls="navigation-index" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler"
+        [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed" id="navigation" type="button">
+        <span class="navbar-toggler-bar bar1"> </span>
+        <span class="navbar-toggler-bar bar2"> </span>
+        <span class="navbar-toggler-bar bar3"> </span>
+      </button>
+    </div>
+    <div class="navbar-collapse justify-content-end" [collapse]="isCollapsed" id="navigation">
+      <div class="navbar-collapse-header">
+        <div class="row">
+          <div class="col-6 collapse-brand"><a> BLK• </a></div>
+          <div class="col-6 collapse-close text-right">
+            <button aria-controls="navigation-index" aria-label="Toggle navigation" class="navbar-toggler"
+              [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed" id="navigation" type="button">
+              <i class="tim-icons icon-simple-remove"> </i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/route']"> Buscar Ruta</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/login']">Salir</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="wrapper">
+  <img class="path" src="assets/img/path4.png" />
+  <div class="section" style="padding-top: 10%;">
+    <div class="container align-items-center">
+      <div class="row">
+        <div class="col-lg-5 col-md-20 offset-lg-3 offset-md-3">
+          <h3 class="font-weight-bold">Búsqueda De Rutas</h3>
+          <section style="border: 2px solid #E469BD; padding: 20px;">
+            <form #routeForm="ngForm">
+              <label style="color:azure">Ciudad de Origen </label>
+              <input type="text" class="form-control" origenInput="ngModel" name="origen"
+                [(ngModel)]="scheduledFlightCityOrigin" [pattern]="onlyletters" #origen="ngModel" required>
+              <br>
+              <div class="text-primary" *ngIf="origen.errors?.pattern">
+                Solo se permiten letras
+              </div>
+              <br>
+              <label style="color:azure">Ciudad de Destino </label>
+              <input type="text" class="form-control" destinoInput="ngModel" name="destino" [pattern]="onlyletters"
+                #destino="ngModel" [(ngModel)]="scheduledFlightCityDestination" required>
+              <br>
+              <div *ngIf="destino.errors?.pattern" class="text-primary">
+                Solo se permiten letras
+              </div>
+              <br>
+              <label style="color:azure">Fecha de Salida </label>
+              <input type="date" min="{{currentDate|date:'yyyy-MM-dd'}}" class="form-control"
+                [ngModelOptions]="{standalone: true}" [(ngModel)]="dateOfDeparture" required>
+              <br><br>
+              <center>
+                <input type="submit" value="BUSCAR" [disabled]="routeForm.invalid"
+                  (click)="searchScheduleFlight(scheduledFlightCityOrigin,scheduledFlightCityDestination,dateOfDeparture)"
+                  class="btn btn-primary">
+              </center>
+              <br><br>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container">
+      <div *ngIf="show">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2>Lista de Rutas</h2>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Código de Aeropuerto Origen</th>
+                  <th>Código de Aeropuerto Destino</th>
+                  <th>Tipo de Ruta</th>
+                  <th>Temporada</th>
+                  <th>Tarifa Base</th>
+                  <th>Hora de Salida</th>
+                  <th>Hora de Llegada</th>
+                  <th>Duración</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ruta of rutas; let i = index">
+                  <td >{{ruta.codigoAeropuertoOrigen}}</td>
+                  <td>{{ruta.codigoAeropuertoDestino}}</td>
+                  <td>{{ruta.tipoRuta}}</td>
+                  <td>{{ruta.temporada}}</td>
+                  <td>{{ruta.tarifaBase}}</td>
+                  <td>{{ruta.horaSalida}}</td>
+                  <td>{{ruta.horaLlegada}}</td>
+                  <td>{{ruta.duracion}}</td>
+                  <td><input type="button" value="Reservar" (click)="obtainRutaInformation(i)" class="btn btn-primary">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h1 class="title">BLK•</h1>
+        </div>
+        <div class="col-md-3">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/login']"> Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/route']"> Buscar Ruta </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+          <h3 class="title">Follow us:</h3>
+          <div class="btn-wrapper profile">
+            <a class="btn btn-icon btn-neutral btn-round btn-simple mr-1" href="https://twitter.com/creativetim"
+              target="_blank">
+              <i class="fab fa-twitter"> </i>
+            </a>
+            <a class="btn btn-icon btn-neutral btn-round btn-simple mr-1" href="https://www.facebook.com/creativetim"
+              target="_blank">
+              <i class="fab fa-facebook-square"> </i>
+            </a>
+            <a class="btn btn-icon btn-neutral btn-round btn-simple" href="https://dribbble.com/creativetim"
+              target="_blank">
+              <i class="fab fa-dribbble"> </i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

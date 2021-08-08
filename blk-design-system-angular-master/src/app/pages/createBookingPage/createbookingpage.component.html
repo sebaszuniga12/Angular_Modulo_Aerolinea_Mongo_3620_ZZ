@@ -1,0 +1,723 @@
+<style>
+  .colapseDiv:hover {
+    opacity: 1;
+    transform: scale(1.3);
+    transition: all 0.3s ease-in-out 0.1s;
+    padding-left: 15%;
+    max-width: 100%;
+  }
+  .colapseDiv {
+    -webkit-transition: ease-out 0.3s;
+  }
+</style>
+<nav class="navbar navbar-expand-lg fixed-top navbar-transparent" color-on-scroll="100" id="navbar-top">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand" [routerLink]="" placement="bottom">
+        <span> BLK• </span> Reserva de Vuelos
+      </a>
+      <button aria-controls="navigation-index" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler"
+        [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed" id="navigation" type="button">
+        <span class="navbar-toggler-bar bar1"> </span>
+        <span class="navbar-toggler-bar bar2"> </span>
+        <span class="navbar-toggler-bar bar3"> </span>
+      </button>
+    </div>
+    <div class="navbar-collapse justify-content-end" [collapse]="isCollapsed" id="navigation">
+      <div class="navbar-collapse-header">
+        <div class="row">
+          <div class="col-6 collapse-brand"><a> BLK• </a></div>
+          <div class="col-6 collapse-close text-right">
+            <button aria-controls="navigation-index" aria-label="Toggle navigation" class="navbar-toggler"
+              [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed" id="navigation" type="button">
+              <i class="tim-icons icon-simple-remove"> </i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/route']"> Buscar Ruta</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']">Salir</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="wrapper">
+  <img class="path" src="assets/img/path4.png" />
+  <div class="container align-items-center" style="padding-top: 10%;">
+    <div class="row">
+      <div class="col-lg-5 col-md-20 offset-lg-3 offset-md-3">
+        <h3 class="font-weight-bold">Ingresar el número de boletos </h3>
+        <div class="container card shadow-lg p-3 mb-5">
+          <section style="border: 2px solid #E469BD; padding: 20px;">
+            <form #findForm="ngForm">
+              <label style="color:azure">Número de Boletos </label>
+              <input type="number" class="form-control" name="boletos" #boletosInput="ngModel"
+                [(ngModel)]="numberTickets" min="1" required />
+              <br>
+              <label style="color:azure">Fecha de Salida </label>
+              <input type="text" id="departure" class="form-control" [ngModelOptions]="{standalone: true}" disabled
+                [(ngModel)]="dateOfDeparture" required>
+              <br><br>
+              <center>
+                <input type="submit" value="SEARCH" [disabled]="findForm.invalid"
+                  (click)="find(numberTickets,dateOfDeparture)" class="btn btn-primary">
+              </center>
+              <br><br>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div *ngIf="showFindPassenger">
+            <div class="col-lg-30 col-md-20 offset-lg-1">
+              <h3 class="font-weight-bold">Buscar Pasajero </h3>
+              <div class="container card shadow-lg p-3 mb-5">
+                <section style="border: 2px solid #E469BD; padding: 20px;">
+                  <form #passengerFindForm="ngForm">
+                    <div class="form-group">
+                      <label style="color:azure">Tipo de Identificación </label>
+                      <select name="singleSelect" id="singleSelect" #tipoIdentificacionInput="ngModel"
+                        name="tipoIdentificacion" [(ngModel)]="passengerTypeIdentification" required
+                        style="width:100%;">
+                        <option value="CED">Cédula</option>
+                        <option value="PAS">Pasaporte</option>
+                      </select>
+                      <br><br>
+                      <label style="color:azure">Identificación </label>
+                      <input type="text" class="form-control" #identificacionInput="ngModel" name="identificacion"
+                        [(ngModel)]="passengerIdentification" required>
+                      <br>
+                      <center>
+                        <input type="submit" [disabled]="passengerFindForm.invalid" value="BUSCAR"
+                          (click)="searchPassengerByIdentification(passengerTypeIdentification,passengerIdentification)"
+                          class="btn btn-primary">
+                        <br><br>
+                        <input type="submit" value="CREAR" (click)="availableCreate()" class="btn btn-primary">
+                      </center>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col">
+
+          <div *ngIf="showPassengerInfo">
+            <div class="panel panel-primary">
+              <div class="col-lg-12 col-md-8 offset-lg-1">
+                <div class="panel-heading">
+                  <h3 class="font-weight-bold">Lista de Pasajeros</h3>
+                </div>
+                <div class="panel-body">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Tipo de Identificación</th>
+                        <th>Identificación</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let info of passengerinfo; let index = index">
+                        <th scope="row">{{index+1}}</th>
+                        <td>{{info.tipoIdentificacion}}</td>
+                        <td>{{info.identificacion}}</td>
+                        <td><input type="button" value="Eliminar" (click)="deletePassenger(info.identificacion)"
+                            class="btn btn-primary"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="showPassenger">
+            <div class="panel panel-primary">
+
+              <div class="col-lg-12 col-md-8 offset-lg-1">
+                <div class="panel-heading">
+                  <h3 class="font-weight-bold">Información de Pasajero</h3>
+                </div>
+                <div class="panel-body">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Tipo de Identificación</th>
+                        <th>Identificación</th>
+                        <th>Apellidos</th>
+                        <th>Nombres</th>
+                        <th>Fecha de nacimiento</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">{{passenger.tipoIdentificacion}}</th>
+                        <td>{{passenger.identificacion}}</td>
+                        <td>{{passenger.apellido}}</td>
+                        <td>{{passenger.nombre}}</td>
+                        <td>{{passenger.fechaDeNacimiento | date:'yyyy-MM-dd'}}</td>
+                        <td><input type="button" value="Seleccionar" (click)="obtainPassengerInformation(passenger)"
+                            class="btn btn-primary"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+        </div>
+        <div class="col">
+          <div *ngIf="showCreatePassenger">
+            <div class="form-group-row">
+              <div class="col-lg-12 col-md-12">
+                <h3 class="font-weight-bold">Crear Pasajero</h3>
+                <div class="container card shadow-lg p-3 mb-5">
+                  <section style="border: 2px solid #E469BD; padding: 20px;">
+                    <form #pasajeroForm="ngForm">
+                      <div class="form-group">
+                        <label style="color:azure">Tipo de Identificación</label>
+                        <select name="singleSelect" id="singleSelect" #tipoIdentificacionInput="ngModel"
+                          name="tipoIdentificacion" [(ngModel)]="passengerNew.tipoIdentificacion" required
+                          style="width: 100%;">
+                          <option value="CED">Cédula</option>
+                          <option value="PAS">Pasaporte</option>
+                        </select>
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:azure">Identificación</label>
+                        <input type="text" class="form-control" id="identificacion" #identificacionInput="ngModel"
+                          required [(ngModel)]="passengerNew.identificacion" 
+                          #identificacion="ngModel" name="identificacion">
+                      </div>
+                      <div class="text-primary" *ngIf="identificacion.errors?.pattern">
+                        Solo se permiten numeros
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:azure">Apellidos</label>
+                        <input type="text" class="form-control" id="apellido" #apellidoInput="ngModel"
+                          [pattern]="onlyletters" #apellido="ngModel" required [(ngModel)]="passengerNew.apellido"
+                          name="apellido">
+                      </div>
+                      <div class="text-primary" *ngIf="apellido.errors?.pattern">
+                        Solo se permiten letras
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:azure">Nombres</label>
+                        <input type="text" class="form-control" id="nombre" #nombreInput="ngModel"
+                          [pattern]="onlyletters" #nombre="ngModel" required [(ngModel)]="passengerNew.nombre"
+                          name="nombre">
+                      </div>
+                      <div class="text-primary" *ngIf="nombre.errors?.pattern">
+                        Solo se permiten letras
+                      </div>
+                      <br>
+                      <div class="form-group">
+                        <label style="color:azure">Fecha De Nacimiento</label>
+                        <input type="date" class="form-control" id="fechaDeNacimiento" #fechaDeNacimientoInput="ngModel"
+                          name="fechaDeNacimiento" [(ngModel)]="passengerNew.fechaDeNacimiento" required>
+                      </div>
+                      <br><br>
+                      <center>
+                        <button type="submit" [disabled]="pasajeroForm.invalid" (click)="save()"
+                          class="btn btn-primary">Crear</button>
+                        <button type="submit" (click)="closeCreatePassenger()" class="btn btn-primary">Cerrar</button>
+                      </center>
+                    </form>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showReserve">
+            <div class="form-group-row">
+              <div class="col-lg-12 col-md-12">
+                <center>
+                  <button type="submit" (click)="getSeats()" class="btn btn-primary">Seleccionar asientos</button>
+                  <button class="btn btn-primary" data-target="#myModal" (click)="myModal.show();showFindClientView()">
+                    Buscar Cliente
+                  </button>
+                </center>
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div *ngIf="showClientSelect">
+            <div *ngIf="showClientFindSelectNoRuc">
+
+              <div class="panel panel-primary">
+
+                <div class="col-lg-12 col-md-8 offset-lg-1">
+                  <div class="panel-heading">
+                    <h3 class="font-weight-bold">Información del Cliente</h3>
+                  </div>
+                  <div class="panel-body">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Tipo de Identificación</th>
+                          <th>Identificación</th>
+                          <th>Apellido</th>
+                          <th>Nombre</th>
+                          <th>Dirección</th>
+                          <th>Teléfono</th>
+                          <th>Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th style="color: aliceblue;">{{clientSearch.tipoIdentificacion}}</th>
+                          <td class="text-dark">{{clientSearch.identificacion}}</td>
+                          <td class="text-dark">{{clientSearch.apellido}}</td>
+                          <td class="text-dark">{{clientSearch.nombre}}</td>
+                          <td class="text-dark">{{clientSearch.direccion}}</td>
+                          <td class="text-dark">{{clientSearch.telefono}}</td>
+                          <td class="text-dark">{{clientSearch.email}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showClientFindSelectRuc">
+
+              <div class="panel panel-primary">
+
+                <div class="col-lg-12 col-md-8 offset-lg-1">
+                  <div class="panel-heading">
+                    <h3 class="font-weight-bold">Información del Cliente</h3>
+                  </div>
+                  <div class="panel-body">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Tipo de Identificación</th>
+                          <th>Identificación</th>
+                          <th>Razon Social</th>
+                          <th>Dirección</th>
+                          <th>Teléfono</th>
+                          <th>Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th style="color: aliceblue;">{{clientSearch.tipoIdentificacion}}</th>
+                          <td class="text-dark">{{clientSearch.identificacion}}</td>
+                          <td class="text-dark">{{clientSearch.razonSocial}}</td>
+                          <td class="text-dark">{{clientSearch.direccion}}</td>
+                          <td class="text-dark">{{clientSearch.telefono}}</td>
+                          <td class="text-dark">{{clientSearch.email}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div *ngIf="show">
+        <div class="panel-heading">
+          <h2>Vuelos</h2>
+        </div>
+        <div class="panel-body">
+          <div *ngFor="let seats of seat.vuelo; let i = index">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="colapseDiv">
+                  <h3 (click)="cardCollapsed = !cardCollapsed"> {{ seats.aeropuertoOrigen.ciudad}} [{{
+                    seats.aeropuertoOrigen.codigo}}] a
+                    {{seats.aeropuertoDestino.ciudad}} [{{ seats.aeropuertoDestino.codigo}}] </h3>
+                </div>
+                <div class="container card shadow-lg p-3 mb-20">
+                  <section style="border: 2px solid black; padding: 10px;">
+                    <div class="col-lg-30 col-md-50">
+                      <div class="row">
+                        <div class="col">
+                          <p> Hora de Salida : {{seats.horaSalida}} </p>
+                        </div>
+                        <div class="col">
+                          <p> Hora de Llegada : {{seats.horaLlegada}} </p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <p> Marca : {{seats.avion.marca}} </p>
+                        </div>
+                        <div class="col">
+                          <p> Placa : {{seats.avion.placa}} </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group" class="col-md-12">
+                      <br>
+                      <div *ngFor="let asientos of seat.vuelo[i].avion.asientos; let j = index">
+                        <div class="col-lg-30 col-md-50">
+                          <div class="container card shadow-lg p-3 mb-20">
+                            <section style="border: 1px solid black; padding: 10px;">
+                              <div class="row">
+                                <div class="col">
+                                  <p> Número : {{asientos.numeroAsiento}} </p>
+                                </div>
+                                <div class="col">
+                                  <p> Restricción : {{asientos.restriccion}} </p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col">
+                                  <p> Clase : {{asientos.clase}} </p>
+                                </div>
+                                <div class="col">
+                                  <p> Cargo : {{asientos.cargoExtra}} </p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col">
+                                  <p>Seleccionar</p>
+                                </div>
+                                <div class="col">
+                                  <input type="checkbox" value={{asientos.codigo}}
+                                    (change)="addSeatData($event.target.checked,j,i)">
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="reviewBooking">
+      <center>
+        <div class="form-group-row">
+          <div class="col-lg-12 col-md-12">
+            <button type="submit" (click)="obtainBookingData()" class="btn btn-primary">Revisar Reserva</button>
+          </div>
+        </div>
+      </center>
+    </div>
+  </div>
+
+  <div aria-hidden="true" aria-labelledby="myModalLabel" bsModal class="modal fade" #myModal="bs-modal" id="myModal"
+    role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <button aria-hidden="true" class="close" data-dismiss="modal" type="button" (click)="myModal.hide()">
+            <i class="tim-icons icon-simple-remove"> </i>
+          </button>
+
+          <h4 class="title title-up">Búsqueda Del Cliente</h4>
+        </div>
+
+        <div *ngIf="showFindClient">
+          <div class="modal-body modal-xl" style="width: auto;">
+
+            <div class="col-lg-4 col-md-8 offset-lg-4">
+              <section style="border: 2px solid #383391; padding: 20px;">
+                <form #clientForm="ngForm">
+                  <div class="form-group">
+                    <label>Tipo de identificación </label>
+                    <select name="singleSelect" id="singleSelect" #tipoIdentificacionInput="ngModel"
+                      name="tipoIdentificacion" [(ngModel)]="clientTypeIdentification" required style="width: 100%;">
+                      <option value="CED">Cédula</option>
+                      <option value="PAS">Pasaporte</option>
+                      <option value="RUC">Registro Único de Contribuyentes</option>
+                    </select><br>
+                    <label>Identificación </label><br>
+                    <input type="text" style="color:black;width: 100%;" #identificacionInput="ngModel"
+                      name="identificacion" [(ngModel)]="clientIdentification" required>
+                    <br>
+                    <center>
+                      <input type="submit" [disabled]="clientForm.invalid" value="BUSCAR"
+                        (click)="searchClientByIdentification(clientTypeIdentification,clientIdentification)"
+                        class="btn btn-outline-primary">
+                      <input type="submit" class="btn btn-outline-primary" value="CREAR CLIENTE"
+                        (click)="showCreateClientView()">
+                    </center>
+                  </div>
+                </form>
+              </section>
+            </div>
+            <div *ngIf="showClient">
+              <div *ngIf="showClientFindRuc">
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h2 style="color: black;">Información del cliente</h2>
+                  </div>
+                  <div class="panel-body">
+                    <table class="table table-dark">
+                      <thead>
+                        <tr>
+                          <th>Tipo de Identificación</th>
+                          <th>Identificación</th>
+                          <th>Razon Social</th>
+                          <th>Dirección</th>
+                          <th>Teléfono</th>
+                          <th>Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th style="color: aliceblue;">{{clientSearch.tipoIdentificacion}}</th>
+                          <td class="text-dark">{{clientSearch.identificacion}}</td>
+                          <td class="text-dark">{{clientSearch.razonSocial}}</td>
+                          <td class="text-dark">{{clientSearch.direccion}}</td>
+                          <td class="text-dark">{{clientSearch.telefono}}</td>
+                          <td class="text-dark">{{clientSearch.email}}</td>
+                          <td><input type="button" value="Seleccionar"
+                              (click)="selectClient(clientSearch.tipoIdentificacion);myModal.hide();"
+                              class="btn btn-outline-primary">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div *ngIf="showClientFindNoRuc">
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h2 style="color: black;">Información del cliente</h2>
+                  </div>
+                  <div class="panel-body">
+                    <table class="table table-dark">
+                      <thead>
+                        <tr>
+                          <th>Tipo de Identificación</th>
+                          <th>Identificación</th>
+                          <th>Apellido</th>
+                          <th>Nombre</th>
+                          <th>Dirección</th>
+                          <th>Teléfono</th>
+                          <th>Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th style="color: aliceblue;">{{clientSearch.tipoIdentificacion}}</th>
+                          <td class="text-dark">{{clientSearch.identificacion}}</td>
+                          <td class="text-dark">{{clientSearch.apellido}}</td>
+                          <td class="text-dark">{{clientSearch.nombre}}</td>
+                          <td class="text-dark">{{clientSearch.direccion}}</td>
+                          <td class="text-dark">{{clientSearch.telefono}}</td>
+                          <td class="text-dark">{{clientSearch.email}}</td>
+                          <td><input type="button" value="Seleccionar"
+                              (click)="selectClient(clientSearch.tipoIdentificacion);myModal.hide();"
+                              class="btn btn-outline-primary">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+
+        <div *ngIf="showCreateClient">
+          <div class="modal-body modal-xl" style="width: auto;">
+
+            <form #clientForm="ngForm">
+              <div class="form-group">
+                <label for="name">Tipo de Identificación</label>
+                <select style="margin-left:2%;" name="singleSelect" id="singleSelect" #tipoIdentificacionInput="ngModel"
+                  name="tipoIdentificacion" [(ngModel)]="client.tipoIdentificacion"
+                  (ngModelChange)="changeFields(client.tipoIdentificacion)" required>
+                  <option value="CED">Cédula</option>
+                  <option value="PAS">Pasaporte</option>
+                  <option value="RUC">Registro Único de Contribuyentes</option>
+                </select>
+              </div>
+
+              <div *ngIf="showNoRUC" class="p-3 mb-2 bg-dark text-white">
+                <div class="form-group">
+                  <label for="name">Identificación</label>
+                  <input type="text" class="form-control" id="identificacion" #identificacionInput="ngModel" required
+                    [(ngModel)]="client.identificacion" #identificacion="ngModel" name="identificacion">
+                </div>
+                <div class="text-primary" *ngIf="identificacion.errors?.pattern">
+                  Solo se permiten numeros
+                </div>
+                <div class="form-group">
+                  <label for="name">Apellidos</label>
+                  <input type="text" class="form-control" id="apellido" #apellidoInput="ngModel" [pattern]="onlyletters"
+                    #apellido="ngModel" required [(ngModel)]="client.apellido" name="apellido">
+                </div>
+                <div class="text-primary" *ngIf="apellido.errors?.pattern">
+                  Solo se permiten letras
+                </div>
+                <div class="form-group">
+                  <label for="name">Nombres</label>
+                  <input type="text" class="form-control" id="nombre" #nombreInput="ngModel" [pattern]="onlyletters"
+                    #nombre="ngModel" required [(ngModel)]="client.nombre" name="nombre">
+                </div>
+                <div class="text-primary" *ngIf="nombre.errors?.pattern">
+                  Solo se permiten letras
+                </div>
+                <div class="form-group">
+                  <label for="name">Dirección</label>
+                  <input type="text" class="form-control" id="direccion" #direccionInput="ngModel" required
+                    [(ngModel)]="client.direccion" name="direccion">
+                </div>
+
+                <div class="form-group">
+                  <label for="name">Teléfono</label>
+                  <input type="tel" class="form-control" id="telefono" #telefonoInput="ngModel" required
+                    [(ngModel)]="client.telefono" name="telefono">
+                </div>
+
+                <div class="form-group">
+                  <label for="name">Email</label>
+                  <input type="email" class="form-control" id="email" #emailInput="ngModel" [pattern]="emailvalidate"
+                    #email="ngModel" required [(ngModel)]="client.email" name="email">
+                </div>
+                <div class="text-primary" *ngIf="email.errors?.pattern">
+                  El formato del mail es incorrecto
+                </div>
+                <center>
+                  <button type="submit" (click)="createClient();myModal.hide();" [disabled]="clientForm.invalid"
+                    class="btn btn-outline-primary">Crear Cliente</button>
+                </center>
+              </div>
+
+              <div *ngIf="showRUC" class="p-3 mb-2 bg-dark text-white">
+                <div class="form-group">
+                  <label for="name">Identificación</label>
+                  <input type="text" class="form-control" id="identificacion" #identificacionInput="ngModel" required
+                    [(ngModel)]="client.identificacion" [pattern]="onlynumbers" #identificacion="ngModel"
+                    name="identificacion">
+                </div>
+                <div class="text-primary" *ngIf="identificacion.errors?.pattern">
+                  Solo se permiten numeros
+                </div>
+                <div class="form-group">
+                  <label for="name">Razon Social</label>
+                  <input type="text" class="form-control" id="razonSocial" #razonSocialInput="ngModel" required
+                    [(ngModel)]="client.razonSocial" [pattern]="onlyletters" #razonSocial="ngModel" name="razonSocial">
+                </div>
+                <div class="text-primary" *ngIf="razonSocial.errors?.pattern">
+                  Solo se permiten letras
+                </div>
+                <div class="form-group">
+                  <label for="name">Dirección</label>
+                  <input type="text" class="form-control" id="direccion" #direccionInput="ngModel" required
+                    [(ngModel)]="client.direccion" name="direccion">
+                </div>
+
+                <div class="form-group">
+                  <label for="name">Teléfono</label>
+                  <input type="tel" class="form-control" id="telefono" #telefonoInput="ngModel" required
+                    [(ngModel)]="client.telefono" name="telefono">
+                </div>
+
+                <div class="form-group">
+                  <label for="name">Email</label>
+                  <input type="email" class="form-control" id="email" #emailInput="ngModel" [pattern]="emailvalidate"
+                    #email="ngModel" required [(ngModel)]="client.email" name="email">
+                </div>
+                <div class="text-primary" *ngIf="email.errors?.pattern">
+                  El formato del mail es incorrecto
+                </div>
+                <center>
+                  <button type="submit" (click)="createClient();myModal.hide();" [disabled]="clientForm.invalid"
+                    class="btn btn-outline-primary">Crear Cliente</button>
+                </center>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h1 class="title">BLK•</h1>
+        </div>
+        <div class="col-md-3">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/login']"> Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/route']"> Buscar Ruta </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+          <h3 class="title">Follow us:</h3>
+          <div class="btn-wrapper profile">
+            <a class="btn btn-icon btn-neutral btn-round btn-simple mr-1" href="https://twitter.com/creativetim"
+              target="_blank">
+              <i class="fab fa-twitter"> </i>
+            </a>
+            <a class="btn btn-icon btn-neutral btn-round btn-simple mr-1" href="https://www.facebook.com/creativetim"
+              target="_blank">
+              <i class="fab fa-facebook-square"> </i>
+            </a>
+            <a class="btn btn-icon btn-neutral btn-round btn-simple" href="https://dribbble.com/creativetim"
+              target="_blank">
+              <i class="fab fa-dribbble"> </i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
