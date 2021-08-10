@@ -299,13 +299,14 @@ export class CreateBookingComponent implements OnInit {
     bookingReview.vuelos = this.seat;
     bookingReview.pasajeros = this.passengerinfo;
     this.ticketMap.forEach(tmp => {
+      console.log(this.passengerinfo);
       for (var i = 0; i < this.numberTickets; i++) {
         let ticket: Tickets = new Tickets();
-        ticket.tipoIdentificacionPasajero = this.passengerinfo[i].tipoIdentificacion;
-        ticket.identificacionPasajero = this.passengerinfo[i].identificacion;
+        ticket.tipoIdentificacion = this.passengerinfo[i].tipoIdentificacion;
+        ticket.identificacion = this.passengerinfo[i].identificacion;
         ticket.numeroAsiento = tmp.asientos[i].numeroAsiento;
-        ticket.codigoAeropuertoOrigen= tmp.vuelo.codigoAeropuertoOrigen;
-        ticket.codigoAeropuertoDestino= tmp.vuelo.codigoAeropuertoDestino;
+        ticket.codigoAeropuertoOrigen= tmp.vuelo.aeropuertoOrigen.codigo;
+        ticket.codigoAeropuertoDestino= tmp.vuelo.aeropuertoDestino.codigo;
         tickets.push(ticket);
       }
     }, this);

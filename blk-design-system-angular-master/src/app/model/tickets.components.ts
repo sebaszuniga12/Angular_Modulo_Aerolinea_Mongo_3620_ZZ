@@ -1,6 +1,6 @@
 export class Tickets{
-    tipoIdentificacionPasajero: String = "";
-    identificacionPasajero: String = "";
+    tipoIdentificacion: String = "";
+    identificacion: String = "";
     numeroAsiento: String = "";
     codigoAeropuertoOrigen: String = "";
     codigoAeropuertoDestino: String = "";

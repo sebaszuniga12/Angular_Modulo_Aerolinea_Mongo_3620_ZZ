@@ -62,6 +62,7 @@ export class ReviewBookingComponent implements OnInit {
 
   public reservar() {
     this.showInfo('Se está procesando la reserva')
+    console.log(this.reserva);
     this.bookingService.saveBooking(this.reserva).subscribe(data => {
       sessionStorage.clear();
       sessionStorage.setItem("reserva1", JSON.stringify(data));
