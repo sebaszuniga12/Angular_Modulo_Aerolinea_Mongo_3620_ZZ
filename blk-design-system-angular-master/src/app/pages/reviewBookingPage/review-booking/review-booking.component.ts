@@ -30,19 +30,33 @@ export class ReviewBookingComponent implements OnInit {
     if (!Object.keys(this.reserva).length) {
       this.router.navigate(['/route']);
     }
+    console.log(this.reservaReview);
     //console.log(this.reservaReview.pasajeros.find(i=>i.codigo=4))
   }
 
-  public getPassengerInfo(passengerCode: number): any {
-    return this.reservaReview.pasajeros.find(i => i.codigo === passengerCode);
+  public getPassengerInfo(identificacion: string, tipoIdentificacion: string): any {
+    for(var i=0;i<this.reservaReview.pasajeros.length;i++){
+      if(this.reservaReview.pasajeros[i].tipoIdentificacion == tipoIdentificacion && this.reservaReview.pasajeros[i].identificacion == identificacion){
+        return this.reservaReview.pasajeros[i];
+      }
+    }
   }
 
-  public getVueloInfo(vueloCode: number): any {
-    return this.reservaReview.vuelos.vuelo.find(i => i.codigo === vueloCode);
+  public getVueloInfo(codAeroOrg: string, codAeroDest: string): any {
+    for(var i=0;i<this.reservaReview.vuelos.vuelo.length;i++){
+      if(this.reservaReview.vuelos.vuelo[i].aeropuertoOrigen.codigo == codAeroOrg && this.reservaReview.vuelos.vuelo[i].aeropuertoDestino.codigo == codAeroDest){
+        return this.reservaReview.vuelos.vuelo[i];
+      }
+    }
   }
 
-  public getAsientoInfo(vueloCode: number, asientoCode: number): any {
-    return this.getVueloInfo(vueloCode).avion.asientos.find(i => i.codigo === asientoCode);
+  public getAsientoInfo(codAeroOrg: string, codAeroDest: string, asientoNumber: number): any {
+    let vuelo = this.getVueloInfo(codAeroOrg,codAeroDest);
+    for(var i=0;i<vuelo.avion.asientos.length;i++){
+      if(vuelo.avion.asientos[i].numeroAsiento == asientoNumber){
+        return vuelo.avion.asientos[i];
+      }
+    }
   }
 
   public getClassCharge(): number {

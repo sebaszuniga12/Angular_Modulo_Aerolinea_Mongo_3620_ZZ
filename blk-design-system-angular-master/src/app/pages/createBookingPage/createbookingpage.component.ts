@@ -336,8 +336,11 @@ export class CreateBookingComponent implements OnInit {
         this.checkReviewBookingConditions();
         console.log(this.ticketMap);
       } else {
+        console.log(this.ticketMap);
+        console.log(this.seat);
+        console.log(this.numberTickets);
         for (let m = 0; m < this.ticketMap.length; m++) {
-          if (this.ticketMap[m].vuelo.codigo == this.seat.vuelo[i].codigo) {
+          if (this.ticketMap[m].vuelo.aeropuertoOrigen.codigo == this.seat.vuelo[i].aeropuertoOrigen.codigo && this.ticketMap[m].vuelo.aeropuertoDestino.codigo == this.seat.vuelo[i].aeropuertoDestino.codigo) {
             if (this.ticketMap[m].asientos.length < this.numberTickets) {
               this.ticketMap[m].asientos.push(this.seat.vuelo[i].avion.asientos[j]);
               this.actualTicket++;
@@ -355,15 +358,22 @@ export class CreateBookingComponent implements OnInit {
       }
     } else {
       for (let m = 0; m < this.ticketMap.length; m++) {
-        if (this.ticketMap[m].vuelo.codigo == this.seat.vuelo[i].codigo) {
+        if (this.ticketMap[m].vuelo.aeropuertoOrigen.codigo == this.seat.vuelo[i].aeropuertoOrigen.codigo && this.ticketMap[m].vuelo.aeropuertoDestino.codigo == this.seat.vuelo[i].aeropuertoDestino.codigo) {
           for (var n = 0; n < this.ticketMap[m].asientos.length; n++) {
-            if (this.ticketMap[m].asientos[n].codigo == this.seat.vuelo[i].avion.asientos[j].codigo) {
-              this.ticketMap[m].asientos.splice(i, 1);
-              this.actualTicket--;
-              this.checkReviewBookingConditions();
-              console.log(this.ticketMap);
-              return;
-            }
+            console.log(this.ticketMap[m].vuelo.aeropuertoOrigen.codigo + " <--> "+ this.seat.vuelo[i].aeropuertoOrigen.codigo);
+            console.log(this.ticketMap[m].vuelo.aeropuertoDestino.codigo + " <--> "+ this.seat.vuelo[i].aeropuertoDestino.codigo);
+            console.log(this.ticketMap[m].asientos[n].numeroAsiento+" <-> "+this.seat.vuelo[i].avion.asientos[j].numeroAsiento);
+              if (this.ticketMap[m].asientos[n].numeroAsiento == this.seat.vuelo[i].avion.asientos[j].numeroAsiento) {
+                console.log("i: "+i);
+                console.log("n: "+n);
+                console.log("m: "+m);
+                console.log(this.ticketMap[m].asientos);
+                this.ticketMap[m].asientos.splice(n, 1);
+                this.actualTicket--;
+                this.checkReviewBookingConditions();
+                console.log(this.ticketMap);
+                return;
+              }
           }
           if (this.ticketMap[m].asientos.length == 0) {
             this.showErrorNoSeatsSelect();

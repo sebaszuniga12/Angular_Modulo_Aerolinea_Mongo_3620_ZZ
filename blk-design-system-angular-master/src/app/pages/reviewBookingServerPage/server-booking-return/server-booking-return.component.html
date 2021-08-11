@@ -112,9 +112,9 @@
                                 <h3>Ruta:</h3>
                             </div>
                             <div class="col-md-auto" style="padding-left: 0%;">
-                                <h3>{{reserva.ruta.aeropuertoOrigen.ciudad}}
+                                <h3>{{reserva.ruta.aeropuertoOrigen.ubicacion.ciudad}}
                                     [{{reserva.ruta.aeropuertoOrigen.codigo}}] a
-                                    {{reserva.ruta.aeropuertoDestino.ciudad}}
+                                    {{reserva.ruta.aeropuertoDestino.ubicacion.ciudad}}
                                     [{{reserva.ruta.aeropuertoDestino.codigo}}]</h3>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                         <h3>Fecha de Salida:</h3>
                                     </div>
                                     <div class="col-md-auto">
-                                        <h3>{{reserva.fechaSalida}}</h3>
+                                        <h3>{{reserva.fechaSalida | date:'yyyy-MM-dd'}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -260,9 +260,9 @@
                                         <h3>Ruta:</h3>
                                     </div>
                                     <div class="col-md-auto" style="padding-left: 0%;">
-                                        <h3>{{vuelo.aeropuertoOrigen.ciudad}}
+                                        <h3>{{vuelo.aeropuertoOrigen.ubicacion.ciudad}}
                                             [{{vuelo.aeropuertoOrigen.codigo}}] a
-                                            {{vuelo.aeropuertoDestino.ciudad}}
+                                            {{vuelo.aeropuertoDestino.ubicacion.ciudad}}
                                             [{{vuelo.aeropuertoDestino.codigo}}]</h3>
                                     </div>
                                 </div>
@@ -344,7 +344,7 @@
                         [isAnimated]="animated">
                         <section *ngFor="let boleto of reserva.boletos; let i = index"
                             style="border: 2px solid #5e0e44; padding: 20px;">
-                            <h1>Boleto Nro. {{boleto.codigo}}</h1>
+                            <h1>Boleto {{boleto.codigo}}</h1>
                             <div class="row">
                                 <div class="col col-lg">
                                     <div class="row">
@@ -352,7 +352,7 @@
                                             <h3>Nombre del Pasajero:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{boleto.pasajero.nombre}}</h3>
+                                            <h3>{{boleto.pasajero.nombre + " " + boleto.pasajero.apellido}}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -389,7 +389,7 @@
                                             <h3>Número de Asiento:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{boleto.codigoAsiento}}
+                                            <h3>{{boleto.numeroAsiento}}
                                             </h3>
                                         </div>
                                     </div>

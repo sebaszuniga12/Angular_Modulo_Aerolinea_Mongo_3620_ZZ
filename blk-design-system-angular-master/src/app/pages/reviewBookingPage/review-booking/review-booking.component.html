@@ -145,9 +145,9 @@
                                 <h3>Ruta:</h3>
                             </div>
                             <div class="col-md-auto" style="padding-left: 0%;">
-                                <h3>{{reservaReview.vuelos.aeropuertoOrigen.ciudad}}
+                                <h3>{{reservaReview.vuelos.aeropuertoOrigen.ubicacion.ciudad}}
                                     [{{reservaReview.vuelos.aeropuertoOrigen.codigo}}] a
-                                    {{reservaReview.vuelos.aeropuertoDestino.ciudad}}
+                                    {{reservaReview.vuelos.aeropuertoDestino.ubicacion.ciudad}}
                                     [{{reservaReview.vuelos.aeropuertoDestino.codigo}}]</h3>
                             </div>
                         </div>
@@ -317,9 +317,9 @@
                                         <h3>Ruta:</h3>
                                     </div>
                                     <div class="col-md-auto" style="padding-left: 0%;">
-                                        <h3>{{vuelo.aeropuertoOrigen.ciudad}}
+                                        <h3>{{vuelo.aeropuertoOrigen.ubicacion.ciudad}}
                                             [{{vuelo.aeropuertoOrigen.codigo}}] a
-                                            {{vuelo.aeropuertoDestino.ciudad}}
+                                            {{vuelo.aeropuertoDestino.ubicacion.ciudad}}
                                             [{{vuelo.aeropuertoDestino.codigo}}]</h3>
                                     </div>
                                 </div>
@@ -408,8 +408,8 @@
                                             <h3>Nombre del Pasajero:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getPassengerInfo(boleto.codigoPasajero).nombre+"
-                                                "+getPassengerInfo(boleto.codigoPasajero).apellido}}</h3>
+                                            <h3>{{getPassengerInfo(boleto.identificacion, boleto.tipoIdentificacion).nombre+"
+                                                "+getPassengerInfo(boleto.identificacion, boleto.tipoIdentificacion).apellido}}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -423,7 +423,7 @@
                                             <h3>Aeropuerto de Salida:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getVueloInfo(boleto.codigoVuelo).aeropuertoOrigen.codigo}}</h3>
+                                            <h3>{{getVueloInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino).aeropuertoOrigen.codigo}}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -433,7 +433,7 @@
                                             <h3>Aeropuerto de Llegada:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getVueloInfo(boleto.codigoVuelo).aeropuertoDestino.codigo}}</h3>
+                                            <h3>{{getVueloInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino).aeropuertoDestino.codigo}}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -446,7 +446,7 @@
                                             <h3>Número de Asiento:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getAsientoInfo(boleto.codigoVuelo,boleto.codigoAsiento).numeroAsiento}}
+                                            <h3>{{getAsientoInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino, boleto.numeroAsiento).numeroAsiento}}
                                             </h3>
                                         </div>
                                     </div>
@@ -458,7 +458,7 @@
                                         </div>
                                         <div class="col-md-auto">
                                             <h3>
-                                                <h3>{{getAsientoInfo(boleto.codigoVuelo,boleto.codigoAsiento).clase}}
+                                                <h3>{{getAsientoInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino,boleto.numeroAsiento).clase}}
                                                 </h3>
                                             </h3>
                                         </div>
@@ -472,7 +472,7 @@
                                             <h3>Restriccion:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getAsientoInfo(boleto.codigoVuelo,boleto.codigoAsiento).restriccion}}
+                                            <h3>{{getAsientoInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino,boleto.numeroAsiento).restriccion}}
                                             </h3>
                                         </div>
                                     </div>
@@ -483,7 +483,7 @@
                                             <h3>Placa Avion:</h3>
                                         </div>
                                         <div class="col-md-auto">
-                                            <h3>{{getVueloInfo(boleto.codigoVuelo).avion.placa}}</h3>
+                                            <h3>{{getVueloInfo(boleto.codigoAeropuertoOrigen, boleto.codigoAeropuertoDestino).avion.placa}}</h3>
                                         </div>
                                     </div>
                                 </div>
